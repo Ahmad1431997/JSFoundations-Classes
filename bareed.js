@@ -29,6 +29,7 @@ class Point {
     return new Point(x, y);
   };
 }
+let point1 = new Point(10, 20);
 
 /**********************************************************
  * Wallet: keeps track of money
@@ -43,13 +44,15 @@ class Point {
  **********************************************************/
 class Wallet {
   // implement Wallet!
-  constructor(money = 0) {}
+  constructor(money = 0) {
+    this.money=money; 
+  }
 
-  credit = amount => {};
+  credit = amount => {this.money += amount};
 
-  debit = amount => {};
+  debit = amount => {this.money -= amount};
 }
-
+let wallet1 = new Wallet(50);
 /**********************************************************
  * Person: defines a person with a name (and feelings)
  *
@@ -62,9 +65,16 @@ class Wallet {
  * let person = new Person(name, x, y);
  **********************************************************/
 class Person {
+  constructor (name,x,y){
+    this.name=name;
+    this.location = new Point(x,y);
+    this.wallet = new Wallet();
+  }
   // implement Person!
-}
+  moveTo = (point) => this.location = point
 
+}
+// let person = new Person(name, x, y);
 /**********************************************************
  * Vendor: defines a vendor
  * Subclasses Person
@@ -80,8 +90,21 @@ class Person {
  *
  * new vendor = new Vendor(name, x, y);
  **********************************************************/
-class Vendor {
+class Vendor  extends Person{
+  constructor(name,x,y,range=5,price=1){
+    super(name,x,y)
+    this.person=new Person(name,x,y);
+    this.wallet= new Wallet();
+    this.range=range;
+    this.price=price;
+  }
   // implement Vendor!
+  sellTo = (customer, numberOfIceCreams) => {
+     this.moveTo(customer.location)
+     customer.wallet.debit(this.price * numberOfIceCreams)
+     this.wallet.credit(this.price * numberOfIceCreams)
+
+  };
 }
 
 /**********************************************************
@@ -100,7 +123,11 @@ class Vendor {
  *
  * new customer = new Customer(name, x, y);
  **********************************************************/
-class Customer {
+class Customer extends Person {
+  constructor(name,x,y,wallet){
+    super(name,x,y,wallet)
+    this.wallet= new Wallet(10);
+  }
   // implement Customer!
 }
 
