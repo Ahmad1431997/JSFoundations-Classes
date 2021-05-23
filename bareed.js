@@ -129,6 +129,9 @@ class Customer extends Person {
     this.wallet= new Wallet(10);
   }
   // implement Customer!
+   _isInRange = (vendor) => this.location.distanceTo(vendor.location) < vendor.range;
+
+   _haveEnoughMoney = (vendor, numberOfIceCreams) => this.wallet.money >= vendor.price*numberOfIceCreams;
 }
 
 export { Point, Wallet, Person, Customer, Vendor };
